@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HeritageVerse — Multilingual AI Heritage Storytelling Agent</title>
+  <!-- Google Fonts: Cinzel & Noto Serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Nirmala+UI:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom Heritage Theme -->
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="min-h-screen flex flex-col bg-[#0b0e14] text-[#ece6d9]">
+
+  <!-- Top Announcement / Quota Banner -->
+  <div id="quotaBanner" class="hidden bg-amber-950/80 border-b border-amber-800/60 px-4 py-2 text-xs text-amber-200 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <span class="text-amber-400 font-bold">ℹ️ Sarvam AI Notice:</span>
+      <span id="quotaBannerText">API connected with 0 quota. High-Fidelity Heritage Engine & Web Speech fallback are active for an uninterrupted demo.</span>
+    </div>
+    <button onclick="openApiKeyModal()" class="text-xs underline text-amber-300 hover:text-white font-medium">Manage Key</button>
+  </div>
+
+  <!-- Header -->
+  <header class="border-b border-[#242b3d] bg-[#10141f]/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('vaultTab')">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-600 to-amber-800 border border-amber-400/40 flex items-center justify-center shadow-lg shadow-amber-900/30">
+          <i data-lucide="scroll" class="w-6 h-6 text-amber-200"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-xl font-bold tracking-wide text-amber-300 font-serif">HeritageVerse</h1>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-amber-900/40 text-amber-300 border border-amber-700/50 uppercase tracking-widest font-mono">Agent</span>
+          </div>
+          <p class="text-[11px] text-gray-400">Multilingual Historical Inscription & Oral Archive Storyteller</p>
+        </div>
+      </div>
+
+      <!-- Live Sarvam API Badge & Key Setting -->
+      <div class="flex items-center space-x-3">
+        <div id="apiKeyBadge" class="cursor-pointer" onclick="openApiKeyModal()">
+          <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-800 text-gray-300 border border-gray-700">
+            Checking Sarvam API...
+          </span>
+        </div>
+        <button onclick="openApiKeyModal()" title="API Key Settings"
+          class="p-2 rounded-lg bg-[#181f2f] hover:bg-[#20293d] border border-gray-700 text-amber-300 transition-colors">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="border-t border-[#1d2333] bg-[#0d101a]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-2 overflow-x-auto py-2">
+        <button id="tab_btn_vaultTab" onclick="switchTab('vaultTab')" class="tab-btn active px-3.5 py-1.5 rounded-lg text-xs font-medium border border-transparent hover:text-amber-300 flex items-center whitespace-nowrap">
+          <i data-lucide="landmark" class="w-3.5 h-3.5 mr-1.5"></i> Heritage Vault
+        </button>
+        <button id="tab_btn_ingestionTab" onclick="switchTab('ingestionTab')" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-transparent hover:text-amber-300 flex items-center whitespace-nowrap">
+          <i data-lucide="file-up" class="w-3.5 h-3.5 mr-1.5"></i> Ingestion Studio
+        </button>
+        <button id="tab_btn_translationTab" onclick="switchTab('translationTab')" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-transparent hover:text-amber-300 flex items-center whitespace-nowrap">
+          <i data-lucide="languages" class="w-3.5 h-3.5 mr-1.5"></i> Translation & Lexicon
+        </button>
+        <button id="tab_btn_storyTab" onclick="switchTab('storyTab')" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-transparent hover:text-amber-300 flex items-center whitespace-nowrap">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5"></i> Story Workshop
+        </button>
+        <button id="tab_btn_theaterTab" onclick="switchTab('theaterTab')" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-transparent hover:text-amber-300 flex items-center whitespace-nowrap">
+          <i data-lucide="mic" class="w-3.5 h-3.5 mr-1.5"></i> Audio & Voice Studio
+        </button>
+        <button id="tab_btn_chatTab" onclick="switchTab('chatTab')" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-medium border border-transparent hover:text-amber-300 flex items-center whitespace-nowrap">
+          <i data-lucide="message-square" class="w-3.5 h-3.5 mr-1.5"></i> Ask the Chronicler
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Active Archive Banner -->
+    <div class="heritage-card p-5 relative overflow-hidden">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-amber-400 font-semibold flex items-center">
+            <i data-lucide="book-open" class="w-3.5 h-3.5 mr-1.5"></i> Active Historic Artifact
+          </span>
+          <h2 id="activeArchiveTitle" class="text-xl md:text-2xl font-bold text-amber-100 font-serif mt-1">
+            Major Rock Edict of Emperor Ashoka
+          </h2>
+          <p id="activeArchiveSubtitle" class="text-xs text-gray-400 mt-1">
+            c. 257 BCE (Maurya Empire) • Girnar Rock, Junagadh, Gujarat • Script: Brahmi Script
+          </p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="switchTab('storyTab')" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs flex items-center shadow-md">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5"></i> Enter Story Workshop
+          </button>
+          <button onclick="switchTab('theaterTab')" class="px-4 py-2 rounded-lg bg-[#1e2538] hover:bg-[#28324a] border border-amber-600/40 text-amber-300 text-xs flex items-center">
+            <i data-lucide="volume-2" class="w-3.5 h-3.5 mr-1.5"></i> Voice Narration
+          </button>
+        </div>
+      </div>
+
+      <!-- Script & Transliteration Reveal Box -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-amber-900/30">
+        <div>
+          <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider block mb-1">Authentic Inscribed Script</span>
+          <div id="activeScriptBox" class="ancient-script-box p-3 text-sm text-amber-200/90 max-h-24 overflow-y-auto">
+            𑀤𑁂𑀯𑀸𑀦𑀁𑀧𑀺𑀬𑁂𑀦 𑀧𑀺𑀬𑀤𑀲𑀺𑀦𑀸 𑀭𑀸𑨓𑀸 𑀤𑁂𑀲𑁂𑀲𑀼 𑀲𑀯𑀢𑀸 𑀥𑀁𑀫𑀮𑀺𑀧𑀺 𑀮𑀺𑀔𑀸𑀧𑀺𑀢𑀸...
+          </div>
+        </div>
+        <div>
+          <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider block mb-1">Roman Transliteration</span>
+          <div id="activeTranslitBox" class="p-3 rounded-lg bg-[#11141e] border border-gray-800 text-xs text-gray-300 font-mono max-h-24 overflow-y-auto">
+            Devanampiyena Piyadasina ranya desesu savata dhammalipi likhapita... Sarvatra vijiteshu Devanampriyasya manushya-chikitsa cha pashu-chikitsa cha kata.
+          </div>
+        </div>
+      </div>
+
+      <!-- Archaic Glossary Pills -->
+      <div class="mt-4 pt-3 border-t border-gray-800/80">
+        <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider block mb-2">Archaic Cultural Lexicon</span>
+        <div id="archaicGlossaryList" class="flex flex-wrap gap-2">
+          <!-- Filled dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TAB 1: THE HERITAGE VAULT -->
+    <!-- ========================================================= -->
+    <div id="vaultTab" class="tab-content space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-amber-200 font-serif">The Heritage Vault</h3>
+          <p class="text-xs text-gray-400">Curated epigraphs, royal farmans, and oral archives ready for instant storytelling.</p>
+        </div>
+        <span class="text-xs text-amber-400 bg-amber-950/40 px-3 py-1 rounded-full border border-amber-800/40">
+          5 Authenticated Archives
+        </span>
+      </div>
+
+      <div id="vaultGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Rendered dynamically by loadHeritageVault() -->
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TAB 2: INGESTION STUDIO -->
+    <!-- ========================================================= -->
+    <div id="ingestionTab" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left: Upload Manuscript Scan -->
+        <div class="heritage-card p-5 space-y-4">
+          <div class="flex items-center space-x-2">
+            <i data-lucide="image" class="w-4 h-4 text-amber-400"></i>
+            <h3 class="text-base font-bold text-amber-100 font-serif">Ingest Historic Manuscript (Image/Scan)</h3>
+          </div>
+          <p class="text-xs text-gray-400">Upload high-resolution scans of inscriptions, palm leaves (Talapatra), copper plates, or archival documents.</p>
+          
+          <div class="border-2 border-dashed border-gray-700 hover:border-amber-500 rounded-xl p-6 text-center cursor-pointer transition-colors"
+               onclick="document.getElementById('manuscriptFileInput').click()">
+            <input type="file" id="manuscriptFileInput" accept="image/*" class="hidden" onchange="processManuscriptUpload()" />
+            <i data-lucide="upload-cloud" class="w-8 h-8 text-amber-400 mx-auto mb-2"></i>
+            <p class="text-xs text-gray-300 font-medium">Click to upload manuscript scan (PNG, JPG, WEBP)</p>
+            <p class="text-[11px] text-gray-500 mt-1">Supports Brahmi, Modi, Grantha, Devanagari, Kaithi, and Old Bengali</p>
+          </div>
+
+          <div class="pt-3 border-t border-gray-800">
+            <label class="block text-xs font-medium text-gray-300 mb-1">Or Paste Archival Text Directly:</label>
+            <textarea id="rawTextInput" rows="3" placeholder="Paste ancient script or historical transcription here..."
+              class="w-full bg-[#11141e] border border-gray-700 rounded-lg p-3 text-xs text-gray-200 focus:outline-none focus:border-amber-500"></textarea>
+            <button onclick="processManuscriptUpload()" class="mt-2 w-full py-2 bg-amber-700 hover:bg-amber-600 rounded-lg text-xs font-semibold text-white transition-colors">
+              Transcribe & Analyze Script
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Oral Archive Recording (Sarvam STT) -->
+        <div class="heritage-card p-5 space-y-4">
+          <div class="flex items-center space-x-2">
+            <i data-lucide="mic" class="w-4 h-4 text-amber-400"></i>
+            <h3 class="text-base font-bold text-amber-100 font-serif">Oral Archive Ingestion (Sarvam Saaras STT)</h3>
+          </div>
+          <p class="text-xs text-gray-400">Record oral folklore, elder recollections, songs, or interviews live from your microphone, or upload an audio file.</p>
+          
+          <div class="p-6 bg-[#11141e] border border-gray-800 rounded-xl text-center space-y-4">
+            <div class="w-16 h-16 rounded-full bg-amber-950/60 border border-amber-600/50 flex items-center justify-center mx-auto">
+              <i data-lucide="headphones" class="w-7 h-7 text-amber-300"></i>
+            </div>
+            <div>
+              <p id="recordStatusLabel" class="text-xs text-amber-300 font-medium">Microphone ready</p>
+              <p class="text-[11px] text-gray-500 mt-0.5">Captures Indic dialects and oral heritage accurately</p>
+            </div>
+            <div class="flex items-center justify-center space-x-3">
+              <button id="recordOralAudioBtn" onclick="toggleAudioRecording()"
+                class="px-5 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs flex items-center shadow-lg shadow-amber-900/30">
+                <i data-lucide="mic" class="w-4 h-4 mr-1.5"></i> Record Oral Archive
+              </button>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-gray-800">
+            <label class="block text-xs font-medium text-gray-300 mb-1">Upload Recorded Audio File:</label>
+            <input type="file" id="audioUploadInput" accept="audio/*" class="text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:bg-gray-800 file:text-amber-300 hover:file:bg-gray-700" />
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Ingestion Analysis Result Card -->
+      <div id="ingestionLoading" class="hidden text-center py-8">
+        <div class="inline-block animate-spin text-amber-400 text-2xl mb-2">⏳</div>
+        <p class="text-xs text-gray-300">Deciphering paleography and running acoustic transcription...</p>
+      </div>
+
+      <div id="ingestionResults" class="hidden heritage-card p-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs text-amber-400 font-semibold uppercase">Deciphered Result</span>
+            <span id="detectedScriptBadge" class="text-xs px-2.5 py-0.5 bg-amber-900/40 text-amber-300 rounded border border-amber-700/40"></span>
+            <span id="scriptEraBadge" class="text-xs px-2.5 py-0.5 bg-gray-800 text-gray-300 rounded"></span>
+          </div>
+          <button onclick="switchTab('translationTab')" class="text-xs text-amber-400 hover:underline">
+            Proceed to Translation →
+          </button>
+        </div>
+        <div class="parchment-box text-sm leading-relaxed" id="transcribedContent">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TAB 3: TRANSLATION & CULTURAL LEXICON -->
+    <!-- ========================================================= -->
+    <div id="translationTab" class="tab-content hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-amber-200 font-serif">Multilingual Translation Engine</h3>
+          <p class="text-xs text-gray-400">Powered by Sarvam Mayura Translation API across 11 Indic languages.</p>
+        </div>
+        <span id="translationEngineBadge" class="text-xs text-amber-300 bg-amber-950/40 px-3 py-1 rounded-full border border-amber-800/40">
+          Sarvam Mayura API
+        </span>
+      </div>
+
+      <div id="translationNotice" class="hidden p-3 bg-amber-950/30 border border-amber-800/40 rounded-lg text-xs text-amber-300">
+        <!-- Notice text -->
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Source Text -->
+        <div class="heritage-card p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-amber-400 uppercase">Source Inscription / Transcript</span>
+            <span class="text-xs text-gray-400">Language: Auto-Detect / Indic</span>
+          </div>
+          <textarea id="translateSourceText" rows="9"
+            class="w-full bg-[#11141e] border border-gray-700 rounded-lg p-3 text-sm text-gray-200 focus:outline-none focus:border-amber-500 font-serif leading-relaxed"></textarea>
+        </div>
+
+        <!-- Target Translation -->
+        <div class="heritage-card p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-amber-400 uppercase">Translated Historical Rendering</span>
+            <div class="flex items-center space-x-2">
+              <label class="text-xs text-gray-400">Target:</label>
+              <select id="targetLanguageSelect" onchange="executeTranslation()"
+                class="bg-[#11141e] border border-gray-700 rounded px-2.5 py-1 text-xs text-amber-300 focus:outline-none focus:border-amber-500">
+                <option value="hi-IN">Hindi (हिन्दी)</option>
+                <option value="bn-IN">Bengali (বাংলা)</option>
+                <option value="ta-IN">Tamil (தமிழ்)</option>
+                <option value="te-IN">Telugu (తెలుగు)</option>
+                <option value="mr-IN">Marathi (मराठी)</option>
+                <option value="gu-IN">Gujarati (ગુજરાતી)</option>
+                <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
+                <option value="ml-IN">Malayalam (മലയാളം)</option>
+                <option value="pa-IN">Punjabi (ਪੰਜਾਬੀ)</option>
+                <option value="od-IN">Odia (ଓଡ଼ିଆ)</option>
+                <option value="en-IN">English (India)</option>
+              </select>
+            </div>
+          </div>
+          <textarea id="translatedOutputText" rows="9" readonly
+            class="w-full bg-[#11141e] border border-amber-900/40 rounded-lg p-3 text-sm text-amber-100 font-serif leading-relaxed"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <button onclick="executeTranslation()" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 rounded-lg text-xs font-semibold text-white shadow-md flex items-center">
+          <i data-lucide="sparkles" class="w-4 h-4 mr-2"></i> Translate with Sarvam Mayura
+        </button>
+        <button onclick="switchTab('theaterTab')" class="text-xs text-amber-400 hover:underline flex items-center">
+          Send to Multilingual Voice Narration <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TAB 4: STORY WORKSHOP -->
+    <!-- ========================================================= -->
+    <div id="storyTab" class="tab-content hidden space-y-6">
+      
+      <!-- Mode Selection Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+        <div>
+          <h3 class="text-lg font-bold text-amber-200 font-serif">Narrative Transformation Workshop</h3>
+          <p class="text-xs text-gray-400">Convert ancient text into interactive branching stories, podcasts, or guided tours.</p>
+        </div>
+        <div class="flex items-center bg-[#11141e] p-1 rounded-xl border border-gray-800">
+          <button id="mode_btn_interactive_story" onclick="transformStoryMode('interactive_story')"
+            class="story-mode-btn bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center">
+            <i data-lucide="book" class="w-3.5 h-3.5 mr-1.5"></i> Interactive Story
+          </button>
+          <button id="mode_btn_podcast" onclick="transformStoryMode('podcast')"
+            class="story-mode-btn text-gray-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center">
+            <i data-lucide="radio" class="w-3.5 h-3.5 mr-1.5"></i> Audio Podcast
+          </button>
+          <button id="mode_btn_guided_tour" onclick="transformStoryMode('guided_tour')"
+            class="story-mode-btn text-gray-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center">
+            <i data-lucide="compass" class="w-3.5 h-3.5 mr-1.5"></i> Guided Virtual Tour
+          </button>
+        </div>
+      </div>
+
+      <!-- Story Display & Player Area -->
+      <div class="heritage-card p-6" id="storyContentArea">
+        <!-- Rendered dynamically by window.storyStudio -->
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TAB 5: AUDIO & VOICE STUDIO (SARVAM BULBUL TTS) -->
+    <!-- ========================================================= -->
+    <div id="theaterTab" class="tab-content hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-amber-200 font-serif">Multilingual Voice & Soundscape Theater</h3>
+          <p class="text-xs text-gray-400">Bring history to life with Sarvam Bulbul TTS and synthesized ambient soundscapes.</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <!-- Animated sound visualizer -->
+          <div id="audioVisualizer" class="flex items-center space-x-1 opacity-0 transition-opacity">
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Studio Controls Bar -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 rounded-xl bg-[#11141e] border border-gray-800">
+        <!-- Speaker Voice -->
+        <div>
+          <label class="block text-xs font-medium text-amber-400 mb-1">Sarvam Voice (Bulbul):</label>
+          <select id="voiceSpeakerSelect" class="w-full bg-[#181f2f] border border-gray-700 rounded-lg p-2 text-xs text-amber-200">
+            <option value="shubh">Shubh (Resonant Royal Chronicler)</option>
+            <option value="ratan">Ratan (Elder Oral Sage)</option>
+            <option value="kavitha">Kavitha (Melodic Temple Bard)</option>
+            <option value="priya">Priya (Crisp Modern Historian)</option>
+            <option value="arvind">Arvind (Commanding Classical Voice)</option>
+            <option value="aditya">Aditya (Youthful Expedition Guide)</option>
+            <option value="roopa">Roopa (Warm Matriarch Tone)</option>
+            <option value="shreya">Shreya (Poetic Storyteller)</option>
+          </select>
+        </div>
+
+        <!-- Narration Language -->
+        <div>
+          <label class="block text-xs font-medium text-amber-400 mb-1">Narration Language:</label>
+          <select id="voiceLangSelect" class="w-full bg-[#181f2f] border border-gray-700 rounded-lg p-2 text-xs text-amber-200">
+            <option value="hi-IN">Hindi (हिन्दी)</option>
+            <option value="en-IN">English (India)</option>
+            <option value="bn-IN">Bengali (বাংলা)</option>
+            <option value="ta-IN">Tamil (தமிழ்)</option>
+            <option value="te-IN">Telugu (తెలుగు)</option>
+            <option value="mr-IN">Marathi (मराठी)</option>
+            <option value="gu-IN">Gujarati (ગુજરાતી)</option>
+            <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
+            <option value="ml-IN">Malayalam (മലയാളം)</option>
+            <option value="pa-IN">Punjabi (ਪੰਜਾਬੀ)</option>
+            <option value="od-IN">Odia (ଓଡ଼ିଆ)</option>
+          </select>
+        </div>
+
+        <!-- Ambient Soundscape -->
+        <div>
+          <label class="block text-xs font-medium text-amber-400 mb-1">Ambient Soundscape Layer:</label>
+          <select id="soundscapeSelect" class="w-full bg-[#181f2f] border border-gray-700 rounded-lg p-2 text-xs text-amber-200">
+            <option value="temple_drone">Sacred Temple Bells & Tanpura (432Hz)</option>
+            <option value="royal_court">Maratha Darbar & Sitar Chords</option>
+            <option value="monsoon_library">Monsoon Rain on Palm Leaves</option>
+            <option value="ancient_caravan">Desert Caravan & Night Wind</option>
+            <option value="battlefield_echoes">Distant War Drums & Campfire</option>
+            <option value="none">Silence (Voice Only)</option>
+          </select>
+        </div>
+
+        <!-- Speech Pace -->
+        <div>
+          <div class="flex justify-between text-xs text-amber-400 mb-1">
+            <span>Speech Pace:</span>
+            <span id="paceVal">1.0x</span>
+          </div>
+          <input type="range" id="paceSlider" min="0.75" max="1.35" step="0.05" value="1.0"
+            oninput="document.getElementById('paceVal').innerText = this.value + 'x'"
+            class="w-full accent-amber-500 cursor-pointer mt-2" />
+        </div>
+      </div>
+
+      <!-- Text to Narration Area -->
+      <div class="heritage-card p-5 space-y-4">
+        <label class="block text-xs font-semibold text-amber-400 uppercase">Text to Narrate:</label>
+        <textarea id="narrationTextInput" rows="4"
+          placeholder="Enter text or generate from Story Workshop to narrate..."
+          class="w-full bg-[#11141e] border border-gray-700 rounded-lg p-3 text-sm text-gray-200 font-serif leading-relaxed focus:outline-none focus:border-amber-500"></textarea>
+
+        <!-- Read-along Caption Display Box -->
+        <div class="p-4 rounded-xl bg-black/40 border border-amber-900/30">
+          <span class="text-[10px] text-amber-400 uppercase tracking-widest font-semibold block mb-2">Synchronized Read-Along Captions:</span>
+          <div id="captionContainer" class="text-sm font-serif leading-loose text-gray-300 min-h-[48px] max-h-36 overflow-y-auto">
+            <span class="text-gray-500 italic">Captions will illuminate synchronously as voice speaks...</span>
+          </div>
+        </div>
+
+        <!-- Playback and Mixer Sliders -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+          <button id="playNarrationBtn" onclick="generateAndPlayNarration()"
+            class="w-full sm:w-auto px-6 py-3 bg-amber-600 hover:bg-amber-500 rounded-xl text-white font-semibold text-sm flex items-center justify-center shadow-lg shadow-amber-900/30">
+            <i data-lucide="play" class="w-5 h-5 mr-2"></i> Play Story Narration
+          </button>
+
+          <!-- Dual Volume Mixers -->
+          <div class="flex items-center space-x-5 text-xs text-gray-400">
+            <div class="flex items-center space-x-2">
+              <span>Voice:</span>
+              <input type="range" id="voiceVolSlider" min="0" max="1" step="0.05" value="1.0" class="w-20 accent-amber-500" />
+            </div>
+            <div class="flex items-center space-x-2">
+              <span>Ambient:</span>
+              <input type="range" id="ambientVolSlider" min="0" max="1" step="0.05" value="0.35" class="w-20 accent-amber-500" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TAB 6: ASK THE CHRONICLER (CHAT Q&A) -->
+    <!-- ========================================================= -->
+    <div id="chatTab" class="tab-content hidden space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-amber-200 font-serif">Consult the Heritage Chronicler</h3>
+          <p class="text-xs text-gray-400">Ask historical questions regarding <span id="chatContextTitle" class="text-amber-300">the active artifact</span>.</p>
+        </div>
+      </div>
+
+      <div class="heritage-card p-4 flex flex-col h-[480px]">
+        <!-- Messages Scroll Area -->
+        <div id="chatMessages" class="flex-1 overflow-y-auto space-y-3 pr-2 mb-3">
+          <div class="flex justify-start">
+            <div class="bg-indigo-950/40 text-gray-200 border border-indigo-700/40 px-3.5 py-2.5 rounded-lg max-w-[85%] text-sm font-serif">
+              <div class="text-[11px] text-amber-400 font-sans font-semibold mb-1">📜 Acharya Vidyadhar, Heritage Chronicler</div>
+              Greetings, seeker of antiquity. I have traversed the inscriptions of the subcontinent for centuries. Ask me about the rulers, the paleographical scripts, the ethical decrees, or the lives of the humble artisans who carved these monuments.
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Bar -->
+        <div class="flex items-center space-x-2 pt-2 border-t border-gray-800">
+          <input type="text" id="chatInput" placeholder="Ask a question about this manuscript, ruler, or historical context..."
+            class="flex-1 bg-[#11141e] border border-gray-700 rounded-lg px-4 py-2 text-xs text-gray-200 focus:outline-none focus:border-amber-500" />
+          <button onclick="sendHeritageChat()" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 rounded-lg text-xs font-semibold text-white">
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- API Key Modal -->
+  <div id="apiKeyModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-[#141926] border border-amber-800/60 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold text-amber-200 font-serif flex items-center">
+          <i data-lucide="key" class="w-4 h-4 mr-2 text-amber-400"></i> Sarvam AI API Settings
+        </h3>
+        <button onclick="closeApiKeyModal()" class="text-gray-400 hover:text-white">✕</button>
+      </div>
+      <p class="text-xs text-gray-400">
+        Enter your Sarvam AI API subscription key from <a href="https://dashboard.sarvam.ai" target="_blank" class="text-amber-400 underline">dashboard.sarvam.ai</a>.
+      </p>
+      <div>
+        <label class="block text-xs font-medium text-gray-300 mb-1">API Subscription Key:</label>
+        <input type="password" id="apiKeyInput" placeholder="sk_..." value="sk_8qe7hr5d_ER8Y7judYCnQSoEhD9IoJ4Ps"
+          class="w-full bg-[#0b0e14] border border-gray-700 rounded-lg px-3 py-2 text-xs text-amber-300 font-mono focus:outline-none focus:border-amber-500" />
+      </div>
+      <div class="p-3 bg-amber-950/20 border border-amber-900/40 rounded-lg text-[11px] text-amber-300/90 leading-relaxed">
+        <strong>Automatic Fallback:</strong> If credits are 0 or exhausted, the system automatically uses our built-in Indic Heritage Engine & Harmonic Synthesizer, ensuring your demo never breaks.
+      </div>
+      <div class="flex justify-end space-x-2 pt-2">
+        <button onclick="closeApiKeyModal()" class="px-3 py-1.5 text-xs text-gray-400 hover:text-white">Cancel</button>
+        <button onclick="saveApiKey()" class="px-4 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-semibold">
+          Save & Verify Key
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-[#1a2030] bg-[#090b10] py-4 text-center text-xs text-gray-500">
+    <p>HeritageVerse • An AI Storytelling Agent for Cultural Preservation • Powered by Sarvam AI</p>
+    <p class="text-[11px] text-amber-500/80 mt-1">Crafted by <strong class="text-amber-400">Debonmoy Sanyal</strong> • <em>Jadavpur University</em></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/static/js/audio_player.js"></script>
+  <script src="/static/js/interactive_tour.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
